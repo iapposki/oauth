@@ -9,9 +9,10 @@ passport.use(new GooglePassport.Strategy({
     clientID : process.env["CLIENT_ID"] || "",
     clientSecret : process.env["CLIENT_SECRET"] || "",
     callbackURL : "/auth/google/redirect"
-}, () => {
+}, (accessToken, refreshToken, profile, done) => {
     // passport callback function
     console.log('passport callback function fired.')
+    console.log(profile)
 }));
 
 export default passport;

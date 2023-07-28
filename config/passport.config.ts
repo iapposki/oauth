@@ -1,8 +1,7 @@
 import dotenv from 'dotenv';
 import passport from 'passport';
 import GooglePassport from 'passport-google-oauth20'
-const passportConfig = require('./config').passportConfig
-
+const passportConfig = require('./config').default.passportConfig
 dotenv.config();
 
 passport.use(new GooglePassport.Strategy({

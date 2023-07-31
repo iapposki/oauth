@@ -1,6 +1,9 @@
 import express, {Request, Response, Express} from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+const passportSetup = require('./config/passport.config')
+
+import authRoutes from "./routes/auth.routes";
 
 const app : Express = express();
 const port : Number = 3000;
@@ -17,6 +20,8 @@ app.get('/', (req : Request, res : Response) => {
     res.render('home')
 })
 
+// setup routes
+app.use('/auth', authRoutes);
 
 if (require.main === module) {
     app.listen(port, () => {

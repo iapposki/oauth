@@ -7,7 +7,23 @@ import { User } from '@prisma/client';
 dotenv.config();
 
 const prisma = new PrismaClient();
+declare global {
+    namespace Express {
+        interface User {
+            id : String;
+        }
+    }
+}
 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser(async (id : any, done) =>{
+    const user = await prisma.user.findFirst({
+        where : {id : id}
+    })
+})
 
 passport.use(new GooglePassport.Strategy({
     // options for strategy
@@ -35,7 +51,8 @@ passport.use(new GooglePassport.Strategy({
                 }
             })
         }
-        console.log(user)
+        done(null, user)
+        // console.log(user)
     } catch (error) {console.log('An error occured while creating/logging the user', error)}
 
 }));

@@ -8,7 +8,11 @@ const config = {
     },
     db : {
         databaseURL : process.env["DATABASE_URL"] || "",
-    }
+    },
+    cookieSessionConfig : {
+        secret : process.env["COOKIE_SESSION_SECRET"] || "secret"
+    }, 
+    loginURL : "http://localhost:3000/auth/login"
 }
 
 export default config

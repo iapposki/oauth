@@ -1,13 +1,33 @@
 import dotenv from 'dotenv';
 import passport from 'passport';
 import GooglePassport from 'passport-google-oauth20'
-const passportConfig = require('./config').default.passportConfig
+const passportConfig = require('../config/config').default.passportConfig
+const loginURL = require('../config/config').default.loginURL
 import {PrismaClient, Prisma} from '@prisma/client'
 import { User } from '@prisma/client';
+import { Request, Response, NextFunction } from 'express';
 dotenv.config();
 
 const prisma = new PrismaClient();
+declare global {
+    namespace Express {
+        interface User {
+            id : String;
+            userName : String;
+        }
+    }
+}
 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser(async (id : any, done) =>{
+    const user :any = await prisma.user.findFirst({
+        where : {id : id}
+    })
+    done(null, user)
+})
 
 passport.use(new GooglePassport.Strategy({
     // options for strategy
@@ -35,9 +55,18 @@ passport.use(new GooglePassport.Strategy({
                 }
             })
         }
-        console.log(user)
+        done(null, user)
+        // console.log(user)
     } catch (error) {console.log('An error occured while creating/logging the user', error)}
 
 }));
 
-export default passport;
+const authCheck = (req : Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+        res.redirect(loginURL)
+    } else {
+        next()
+    }
+}
+
+export default {passport, authCheck};

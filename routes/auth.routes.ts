@@ -5,13 +5,19 @@ const router : Router = express.Router();
 
 // auth login
 router.get('/login', (req: Request, res: Response) => {
-    res.render('login')
+    res.render('login', {user : req.user})
 })
 
 // auth logout
 router.get('/logout', (req: Request, res: Response) => {
     // to be handled with passport
-    res.send('logging out')
+
+    req.logout((err) => {
+        if (err) {
+            console.log(err)
+        }
+    });
+    res.redirect('/');
 })
 
 // auth with google

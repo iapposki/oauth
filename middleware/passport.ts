@@ -36,18 +36,13 @@ passport.use(new GooglePassport.Strategy({
     callbackURL : "/auth/google/redirect"
 }, async (accessToken, refreshToken, profile, done) => {
     // passport callback function
-    console.log(profile)
     // console.log(profile)
-
-
-
     try {
         var user : User | null = await prisma.user.findFirst({
             where : {googleID : profile.id}
         })
         let thumbnail : string = profile._json.picture ? profile._json.picture : ""
         if (!user){
-            console.log('making new account')
             user = await prisma.user.create({
                 data : {
                     userName : profile.displayName,

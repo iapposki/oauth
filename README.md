@@ -1,6 +1,6 @@
 #OAuth
 
-To setup, configure the .env file according to the config folder. Then run the following commands : 
+Supports only google OAuth for now. To setup, configure the .env file according to the config folder. Then run the following commands : 
 
 
 ```
